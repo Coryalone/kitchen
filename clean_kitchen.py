@@ -12,9 +12,13 @@ class Inner:
         for item in items:
             if item.name == name:
                 thing = self.item[name]
+                self.item.pop(name)
                 return thing
 
-        return 'Холодильник пуст'
+        return None
+
+    def __str__(self):
+        return str(self.item)
 
 
 class Product:
@@ -35,16 +39,17 @@ class Refrigerator(Inner):
         self.frig = Frig()
 
     def getitems(self, name: str):
-        super().getitems(name)
-        frig_items = self.frig.item.values()  # оптимизировать через композицию
-        for item in frig_items:
-            if item.name == name:
-                thing = self.frig.item[name]
-                return thing
+        obj = super().getitems(name) or self.frig.getitems(name)
+
+        #obj.pop(name)
+        return obj
 
     def addFrigitems(self, item):
         self.frig.additems(item)
         return 'Продукт добавлен'
+
+    def __str__(self):
+        return str((self.item, self.frig.__str__()))
 
 
 class Apple(Product):
